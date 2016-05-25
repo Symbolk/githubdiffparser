@@ -54,10 +54,6 @@ license {
     strictCheck true
 }
 
-//repositories {
-//     maven { url "http://repo.maven.apache.org/maven2" }
-//}
-
 dependencies {
     compile group: 'org.slf4j', name: 'slf4j-api', version:'1.7.5'
 
