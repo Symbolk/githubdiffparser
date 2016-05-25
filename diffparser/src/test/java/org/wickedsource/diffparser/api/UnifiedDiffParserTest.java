@@ -1,9 +1,7 @@
-package org.wickedsource.diffparser.unified;
+package org.wickedsource.diffparser.api;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.wickedsource.diffparser.api.DiffParser;
-import org.wickedsource.diffparser.api.UnifiedDiffParser;
 import org.wickedsource.diffparser.api.model.Diff;
 import org.wickedsource.diffparser.api.model.Hunk;
 import org.wickedsource.diffparser.api.model.Line;
@@ -11,13 +9,10 @@ import org.wickedsource.diffparser.api.model.Line;
 import java.io.InputStream;
 import java.util.List;
 
-/**
- * Tests the DiffParser with a diff created by the "svn diff" command.
- */
-public class SvnDiffTest {
+public class UnifiedDiffParserTest {
 
     @Test
-    public void testParse() throws Exception {
+    public void testParsingSvnOutput() throws Exception {
         // given
         DiffParser parser = new UnifiedDiffParser();
         InputStream in = getClass().getResourceAsStream("svn.diff");
@@ -48,20 +43,53 @@ public class SvnDiffTest {
         Assert.assertEquals(Line.LineType.TO, lines.get(3).getLineType());
         Assert.assertEquals(Line.LineType.FROM, lines.get(7).getLineType());
         Assert.assertEquals(Line.LineType.TO, lines.get(8).getLineType());
-
     }
 
+    @Test
+    public void testParsingGitHubOutput() throws Exception {
+        // given
+        DiffParser parser = new UnifiedDiffParser();
+        InputStream in = getClass().getResourceAsStream("github.diff");
+
+        // when
+        List<Diff> diffs = parser.parse(in);
+
+        // then
+        Assert.assertNotNull(diffs);
+        Assert.assertEquals(4, diffs.size());
+
+        Diff diff1 = diffs.get(0);
+        Assert.assertEquals("a/.travis.yml", diff1.getFromFileName());
+        Assert.assertEquals("b/.travis.yml", diff1.getToFileName());
+        Assert.assertEquals(1, diff1.getHunks().size());
+
+        List<String> headerLines = diff1.getHeaderLines();
+        Assert.assertEquals(2, headerLines.size());
+
+        Hunk hunk1 = diff1.getHunks().get(0);
+        Assert.assertEquals(4, hunk1.getFromFileRange().getLineStart());
+        Assert.assertEquals(6, hunk1.getFromFileRange().getLineCount());
+        Assert.assertEquals(4, hunk1.getToFileRange().getLineStart());
+        Assert.assertEquals(10, hunk1.getToFileRange().getLineCount());
+
+        List<Line> lines = hunk1.getLines();
+        Assert.assertEquals(10, lines.size());
+        Assert.assertEquals(Line.LineType.TO, lines.get(3).getLineType());
+        Assert.assertEquals(Line.LineType.NEUTRAL, lines.get(7).getLineType());
+        Assert.assertEquals(Line.LineType.NEUTRAL, lines.get(8).getLineType());
+    }
+    
     @Test
     public void testParse_WhenHunkRangeLineCountNotSpecified_ShouldSetHunkRangeLineCountToOne() throws Exception {
         // given
         DiffParser parser = new UnifiedDiffParser();
         String in = ""
-            + "--- from	2015-12-21 17:53:29.082877088 -0500\n"
-            + "+++ to	2015-12-21 08:41:52.663714666 -0500\n"
-            + "@@ -10 +10 @@\n"
-            + "-from\n"
-            + "+to\n"
-            + "\n";
+                + "--- from	2015-12-21 17:53:29.082877088 -0500\n"
+                + "+++ to	2015-12-21 08:41:52.663714666 -0500\n"
+                + "@@ -10 +10 @@\n"
+                + "-from\n"
+                + "+to\n"
+                + "\n";
 
         // when
         List<Diff> diffs = parser.parse(in.getBytes());
@@ -83,11 +111,11 @@ public class SvnDiffTest {
         // given
         DiffParser parser = new UnifiedDiffParser();
         String in = ""
-            + "--- from	2015-12-21 17:53:29.082877088 -0500\n"
-            + "+++ to	2015-12-21 08:41:52.663714666 -0500\n"
-            + "@@ -10,1 +10,1 @@\n"
-            + "-from\n"
-            + "+to\n";
+                + "--- from	2015-12-21 17:53:29.082877088 -0500\n"
+                + "+++ to	2015-12-21 08:41:52.663714666 -0500\n"
+                + "@@ -10,1 +10,1 @@\n"
+                + "-from\n"
+                + "+to\n";
 
         // when
         List<Diff> diffs = parser.parse(in.getBytes());
@@ -99,4 +127,5 @@ public class SvnDiffTest {
         Diff diff1 = diffs.get(0);
         Assert.assertEquals(1, diff1.getHunks().size());
     }
+    
 }
