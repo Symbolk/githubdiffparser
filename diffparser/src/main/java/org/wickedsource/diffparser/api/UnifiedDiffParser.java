@@ -28,29 +28,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * A parser that parses a unified diff from text into a {@link org.wickedsource.diffparser.api.model.Diff} data structure.
- * <p/>
- * An example of a unified diff this parser can handle is the following:
- * <pre>
- * Modified: trunk/test1.txt
- * ===================================================================
- * --- /trunk/test1.txt	2013-10-23 19:41:56 UTC (rev 46)
- * +++ /trunk/test1.txt	2013-10-23 19:44:39 UTC (rev 47)
- * @@ -1,4 +1,3 @@
- * test1
- * -test1
- * +test234
- * -test1
- * \ No newline at end of file
- * @@ -5,9 +6,10 @@
- * -test1
- * -test1
- * +test2
- * +test2
- * </pre>
- * Note that the TAB character and date after the file names are not being parsed but instead cut off.
- */
 public class UnifiedDiffParser implements DiffParser {
 
     @Override
