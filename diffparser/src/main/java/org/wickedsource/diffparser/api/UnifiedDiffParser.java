@@ -32,6 +32,7 @@ import static java.util.Arrays.asList;
 import static org.wickedsource.diffparser.unified.Constants.HUNK_START_PATTERN;
 import static org.wickedsource.diffparser.unified.ParserState.*;
 
+@SuppressWarnings("WeakerAccess")
 public class UnifiedDiffParser implements DiffParser {
     
     @Override
