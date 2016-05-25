@@ -51,6 +51,7 @@ ext {
 
 license {
     header = file("${rootProject.projectDir}/LICENSE_HEADER")
+    skipExistingHeaders true
     strictCheck true
 }
 
