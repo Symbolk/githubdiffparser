@@ -140,15 +140,15 @@ public enum ParserState {
             } else if (matchesToLinePattern(line)) {
                 logTransition(line, FROM_LINE, TO_LINE);
                 return TO_LINE;
-            } else if (matchesEndPattern(line, window)) {
-                logTransition(line, FROM_LINE, END);
-                return END;
+            } else if (matchesNeutralLinePattern(line)) {
+                logTransition(line, FROM_LINE, NEUTRAL_LINE);
+                return NEUTRAL_LINE;
             } else if (matchesHunkStartPattern(line)) {
                 logTransition(line, FROM_LINE, HUNK_START);
                 return HUNK_START;
             } else {
-                logTransition(line, FROM_LINE, NEUTRAL_LINE);
-                return NEUTRAL_LINE;
+                logTransition(line, FROM_LINE, END);
+                return END;
             }
         }
     },
@@ -170,15 +170,15 @@ public enum ParserState {
             } else if (matchesToLinePattern(line)) {
                 logTransition(line, TO_LINE, TO_LINE);
                 return TO_LINE;
-            } else if (matchesEndPattern(line, window)) {
-                logTransition(line, TO_LINE, END);
-                return END;
+            } else if (matchesNeutralLinePattern(line)) {
+                logTransition(line, TO_LINE, NEUTRAL_LINE);
+                return NEUTRAL_LINE;
             } else if (matchesHunkStartPattern(line)) {
                 logTransition(line, TO_LINE, HUNK_START);
                 return HUNK_START;
             } else {
-                logTransition(line, TO_LINE, NEUTRAL_LINE);
-                return NEUTRAL_LINE;
+                logTransition(line, TO_LINE, END);
+                return END;
             }
         }
     },
@@ -197,15 +197,15 @@ public enum ParserState {
             } else if (matchesToLinePattern(line)) {
                 logTransition(line, NEUTRAL_LINE, TO_LINE);
                 return TO_LINE;
-            } else if (matchesEndPattern(line, window)) {
-                logTransition(line, NEUTRAL_LINE, END);
-                return END;
+            } else if (matchesNeutralLinePattern(line)) {
+                logTransition(line, NEUTRAL_LINE, NEUTRAL_LINE);
+                return NEUTRAL_LINE;
             } else if (matchesHunkStartPattern(line)) {
                 logTransition(line, NEUTRAL_LINE, HUNK_START);
                 return HUNK_START;
             } else {
-                logTransition(line, NEUTRAL_LINE, NEUTRAL_LINE);
-                return NEUTRAL_LINE;
+                logTransition(line, NEUTRAL_LINE, END);
+                return END;
             }
         }
     },
@@ -261,40 +261,5 @@ public enum ParserState {
     protected boolean matchesHunkStartPattern(String line) {
         return HUNK_START_PATTERN.matcher(line).matches();
     }
-
-    protected boolean matchesEndPattern(String line, ParseWindow window) {
-        if ("".equals(line.trim())) {
-            // We have a newline which might be the delimiter between two diffs. It may just be an empty line in the current diff or it
-            // may be the delimiter to the next diff. This has to be disambiguated...
-            int i = 1;
-            String futureLine;
-            while ((futureLine = window.getFutureLine(i)) != null) {
-                if (matchesFromFilePattern(futureLine)) {
-                    // We found the start of a new diff without another newline in between. That makes the current line the delimiter
-                    // between this diff and the next.
-                    return true;
-                } else if ("".equals(futureLine.trim())) {
-                    // We found another newline after the current newline without a start of a new diff in between. That makes the
-                    // current line just a newline within the current diff.
-                    return false;
-                } else {
-                    i++;
-                }
-            }
-            // We reached the end of the stream.
-            return true;
-        } else {
-            // some diff tools like "svn diff" do not put an empty line between two diffs
-            // we add that empty line and call the method again
-            String nextFromFileLine = window.getFutureLine(3);
-            if(nextFromFileLine != null && matchesFromFilePattern(nextFromFileLine)){
-                window.addLine(1, "");
-                return matchesEndPattern(line, window);
-            }else{
-                return false;
-            }
-        }
-    }
-
 
 }
