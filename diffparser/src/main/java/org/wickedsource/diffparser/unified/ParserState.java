@@ -253,6 +253,10 @@ public enum ParserState {
     protected boolean matchesToLinePattern(String line) {
         return line.startsWith("+");
     }
+    
+    protected boolean matchesNeutralLinePattern(String line) {
+        return line.startsWith(" ");
+    }
 
     protected boolean matchesHunkStartPattern(String line) {
         return HUNK_START_PATTERN.matcher(line).matches();
