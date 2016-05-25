@@ -1,16 +1,62 @@
+buildscript {
+    repositories {
+        jcenter()
+
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        classpath "gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.12.1"
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.3'
+    }
+}
+
+repositories {
+    jcenter()
+}
+
 apply plugin: 'java'
-
-group = 'org.wickedsource'
-version = '1.2'
-
-description = """diffparser"""
+apply plugin: 'com.github.hierynomus.license'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-repositories {
-     maven { url "http://repo.maven.apache.org/maven2" }
+ext {
+    // Library info:
+    libraryVersion = '1.2'
+    libraryName = 'github-diff-parser'
+    libraryGroupId = 'com.github.stkent'
+    libraryArtifactId = 'github-diff-parser'
+    libraryDescription = 'Diff parser that handles GitHub diff formatting.'
+    libraryInceptionYear = '2016'
+    libraryGitHubRepoName = 'stkent/github-diff-parser'
+    libraryGitHubUrl = "https://github.com/${libraryGitHubRepoName}"
+    libraryIssueTrackerUrl = "${libraryGitHubUrl}/issues"
+    libraryWebsiteUrl = libraryGitHubUrl
+    libraryLabels = ['diff', 'parsing', 'github']
+    libraryLicenseName = 'Apache License Version 2.0'
+    libraryLicenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.html'
+
+    // Developer info:
+    developerId = 'stkent'
+    developerName = 'Stuart Kent'
+    developerEmail = 'skent.dev@gmail.com'
+
+    // Hosting info:
+    bintrayRepo = 'java-libraries'
 }
+
+license {
+    header = file("${rootProject.projectDir}/LICENSE_HEADER")
+    strictCheck true
+}
+
+//repositories {
+//     maven { url "http://repo.maven.apache.org/maven2" }
+//}
 
 dependencies {
     compile group: 'org.wickedsource', name: 'docx-stamper', version:'1.0.0'
@@ -19,3 +65,6 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.slf4j', name: 'slf4j-log4j12', version:'1.7.5'
 }
+
+apply from: 'https://raw.githubusercontent.com/stkent/gradle-script-plugins/master/java-bintray.gradle'
+apply from: 'https://raw.githubusercontent.com/stkent/gradle-script-plugins/master/java-install.gradle'
