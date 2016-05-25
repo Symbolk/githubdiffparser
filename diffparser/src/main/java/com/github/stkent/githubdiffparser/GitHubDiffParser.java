@@ -36,6 +36,7 @@ import com.github.stkent.githubdiffparser.models.Diff;
 import com.github.stkent.githubdiffparser.models.Hunk;
 import com.github.stkent.githubdiffparser.models.Line;
 import com.github.stkent.githubdiffparser.models.Range;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -48,6 +49,7 @@ import static java.util.Arrays.asList;
 @SuppressWarnings("WeakerAccess")
 public class GitHubDiffParser {
     
+    @NotNull
     public List<Diff> parse(InputStream in) {
         ResizingParseWindow window = new ResizingParseWindow(in);
         ParserState state = ParserState.INITIAL;
@@ -108,10 +110,12 @@ public class GitHubDiffParser {
         return parsedDiffs;
     }
 
+    @NotNull
     public List<Diff> parse(byte[] bytes) {
         return parse(new ByteArrayInputStream(bytes));
     }
 
+    @NotNull
     public List<Diff> parse(File file) throws IOException {
         return parse(new FileInputStream(file));
     }
