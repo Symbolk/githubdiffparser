@@ -66,7 +66,7 @@ public class UnifiedDiffParser implements DiffParser {
                 case NEUTRAL_LINE:
                     parseNeutralLine(currentDiff, currentLine);
                     break;
-                case END:
+                case DELIMITER:
                     parsedDiffs.add(currentDiff);
                     currentDiff = new Diff();
                     break;

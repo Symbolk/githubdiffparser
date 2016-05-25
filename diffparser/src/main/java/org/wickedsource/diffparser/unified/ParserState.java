@@ -146,9 +146,17 @@ public enum ParserState {
             } else if (matchesHunkStartPattern(line)) {
                 logTransition(line, FROM_LINE, HUNK_START);
                 return HUNK_START;
+            } else if (matchesDelimiterPattern(line)) {
+                logTransition(line, FROM_LINE, DELIMITER);
+                return DELIMITER;
             } else {
-                logTransition(line, FROM_LINE, END);
-                return END;
+                if (matchesFromFilePattern(line)) {
+                    logTransition(line, FROM_LINE, FROM_FILE);
+                    return FROM_FILE;
+                } else {
+                    logTransition(line, FROM_LINE, HEADER);
+                    return HEADER;
+                }
             }
         }
     },
@@ -176,9 +184,17 @@ public enum ParserState {
             } else if (matchesHunkStartPattern(line)) {
                 logTransition(line, TO_LINE, HUNK_START);
                 return HUNK_START;
+            } else if (matchesDelimiterPattern(line)) {
+                logTransition(line, TO_LINE, DELIMITER);
+                return DELIMITER;
             } else {
-                logTransition(line, TO_LINE, END);
-                return END;
+                if (matchesFromFilePattern(line)) {
+                    logTransition(line, TO_LINE, FROM_FILE);
+                    return FROM_FILE;
+                } else {
+                    logTransition(line, TO_LINE, HEADER);
+                    return HEADER;
+                }
             }
         }
     },
@@ -203,9 +219,17 @@ public enum ParserState {
             } else if (matchesHunkStartPattern(line)) {
                 logTransition(line, NEUTRAL_LINE, HUNK_START);
                 return HUNK_START;
+            } else if (matchesDelimiterPattern(line)) {
+                logTransition(line, NEUTRAL_LINE, DELIMITER);
+                return DELIMITER;
             } else {
-                logTransition(line, NEUTRAL_LINE, END);
-                return END;
+                if (matchesFromFilePattern(line)) {
+                    logTransition(line, NEUTRAL_LINE, FROM_FILE);
+                    return FROM_FILE;
+                } else {
+                    logTransition(line, NEUTRAL_LINE, HEADER);
+                    return HEADER;
+                }
             }
         }
     },
@@ -214,11 +238,11 @@ public enum ParserState {
      * The parser is in this state if it is currently parsing a line that is the delimiter between two Diffs. This line is always a new
      * line.
      */
-    END {
+    DELIMITER {
         @Override
         public ParserState nextState(ParseWindow window) {
             String line = window.getFocusLine();
-            logTransition(line, END, INITIAL);
+            logTransition(line, DELIMITER, INITIAL);
             return INITIAL;
         }
     };
@@ -256,6 +280,10 @@ public enum ParserState {
     
     protected boolean matchesNeutralLinePattern(String line) {
         return line.startsWith(" ");
+    }
+    
+    protected boolean matchesDelimiterPattern(String line) {
+        return line.isEmpty();
     }
 
     protected boolean matchesHunkStartPattern(String line) {
