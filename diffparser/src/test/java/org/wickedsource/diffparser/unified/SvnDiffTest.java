@@ -1,7 +1,7 @@
 package org.wickedsource.diffparser.unified;
 
-import junit.framework.Assert;
-import org.testng.annotations.Test;
+import org.junit.Assert;
+import org.junit.Test;
 import org.wickedsource.diffparser.api.DiffParser;
 import org.wickedsource.diffparser.api.UnifiedDiffParser;
 import org.wickedsource.diffparser.api.model.Diff;
