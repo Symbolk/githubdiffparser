@@ -28,7 +28,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static java.util.Arrays.asList;
 import static org.wickedsource.diffparser.unified.Constants.HUNK_START_PATTERN;
+import static org.wickedsource.diffparser.unified.ParserState.*;
 
 public class UnifiedDiffParser implements DiffParser {
     
@@ -40,17 +42,28 @@ public class UnifiedDiffParser implements DiffParser {
         List<Diff> parsedDiffs = new ArrayList<>();
         Diff currentDiff = new Diff();
         String currentLine;
+
         while ((currentLine = window.slideForward()) != null) {
             targetState = state.nextState(window);
             
-            switch (state) {
+            switch (targetState) {
                 case INITIAL:
                     // nothing to do
                     break;
                 case HEADER:
+                    if (asList(FROM_LINE, TO_LINE, NEUTRAL_LINE).contains(state)) {
+                        parsedDiffs.add(currentDiff);
+                        currentDiff = new Diff();
+                    }
+                    
                     parseHeader(currentDiff, currentLine);
                     break;
                 case FROM_FILE:
+                    if (asList(FROM_LINE, TO_LINE, NEUTRAL_LINE).contains(state)) {
+                        parsedDiffs.add(currentDiff);
+                        currentDiff = new Diff();
+                    }
+                    
                     parseFromFile(currentDiff, currentLine);
                     break;
                 case TO_FILE:
