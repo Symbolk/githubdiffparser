@@ -37,12 +37,12 @@ import java.util.List;
 
 /**
  * Represents a "hunk" of changes made to a file.
- * <p/>
+ * 
  * A Hunk consists of one or more lines that either exist only in the first file ("from line"), only in the second file ("to line") or in
  * both files ("neutral line"). Additionally, it contains information about which excerpts of the compared files are compared in this
  * Hunk in the form of line ranges.
  *
- * @author Tom Hombergs <tom.hombergs@gmail.com>
+ * @author Tom Hombergs [tom.hombergs@gmail.com]
  */
 @SuppressWarnings("UnusedDeclaration")
 public class Hunk {

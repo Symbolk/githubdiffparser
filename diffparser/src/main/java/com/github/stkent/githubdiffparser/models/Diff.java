@@ -38,7 +38,7 @@ import java.util.List;
 /**
  * Represents a Diff between two files.
  *
- * @author Tom Hombergs <tom.hombergs@gmail.com>
+ * @author Tom Hombergs [tom.hombergs@gmail.com]
  */
 @SuppressWarnings("UnusedDeclaration")
 public class Diff {

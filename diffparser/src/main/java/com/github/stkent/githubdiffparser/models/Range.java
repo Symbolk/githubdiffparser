@@ -35,7 +35,7 @@ package com.github.stkent.githubdiffparser.models;
 /**
  * Represents a range of line numbers that spans a window on a text file.
  *
- * @author Tom Hombergs <tom.hombergs@gmail.com>
+ * @author Tom Hombergs [tom.hombergs@gmail.com]
  */
 public class Range {
 

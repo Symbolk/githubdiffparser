@@ -44,7 +44,7 @@ import java.util.regex.Pattern;
  * offers methods to get the currently focused line as well as upcoming lines.
  * It is backed by an automatically resizing {@link LinkedList}
  *
- * @author Tom Hombergs <tom.hombergs@gmail.com>
+ * @author Tom Hombergs [tom.hombergs@gmail.com]
  */
 @SuppressWarnings("UnusedDeclaration")
 public class ResizingParseWindow implements ParseWindow {

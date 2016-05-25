@@ -40,10 +40,10 @@ import static com.github.stkent.githubdiffparser.Constants.HUNK_START_PATTERN;
 /**
  * State machine for a parser parsing a unified diff.
  *
- * @author Tom Hombergs <tom.hombergs@gmail.com>
+ * @author Tom Hombergs [tom.hombergs@gmail.com]
  */
 @SuppressWarnings("Duplicates")
-public enum ParserState {
+enum ParserState {
 
     /**
      * This is the initial state of the parser.
@@ -79,8 +79,9 @@ public enum ParserState {
 
     /**
      * The parser is in this state if it is currently parsing the line containing the "from" file.
-     * <p/>
-     * Example line:<br/>
+     * 
+     * Example line:
+     * 
      * {@code --- /path/to/file.txt}
      */
     FROM_FILE {
@@ -98,8 +99,9 @@ public enum ParserState {
 
     /**
      * The parser is in this state if it is currently parsing the line containing the "to" file.
-     * <p/>
-     * Example line:<br/>
+     * 
+     * Example line:
+     * 
      * {@code +++ /path/to/file.txt}
      */
     TO_FILE {
@@ -117,8 +119,9 @@ public enum ParserState {
 
     /**
      * The parser is in this state if it is currently parsing a line containing the header of a hunk.
-     * <p/>
-     * Example line:<br/>
+     * 
+     * Example line:
+     * 
      * {@code @@ -1,5 +2,6 @@}
      */
     HUNK_START {
@@ -139,8 +142,9 @@ public enum ParserState {
     /**
      * The parser is in this state if it is currently parsing a line containing a line that is in the first file,
      * but not the second (a "from" line).
-     * <p/>
-     * Example line:<br/>
+     * 
+     * Example line:
+     * 
      * {@code - only the dash at the start is important}
      */
     FROM_LINE {
@@ -171,8 +175,9 @@ public enum ParserState {
     /**
      * The parser is in this state if it is currently parsing a line containing a line that is in the second file,
      * but not the first (a "to" line).
-     * <p/>
-     * Example line:<br/>
+     * 
+     * Example line:
+     * 
      * {@code + only the plus at the start is important}
      */
     TO_LINE {

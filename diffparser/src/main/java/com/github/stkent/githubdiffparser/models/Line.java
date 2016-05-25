@@ -36,7 +36,7 @@ package com.github.stkent.githubdiffparser.models;
  * Represents a line of a Diff. A line is either contained in both files ("neutral"), only in the first file ("from"),
  * or only in the second file ("to").
  *
- * @author Tom Hombergs <tom.hombergs@gmail.com>
+ * @author Tom Hombergs [tom.hombergs@gmail.com]
  */
 @SuppressWarnings("UnusedDeclaration")
 public class Line {
