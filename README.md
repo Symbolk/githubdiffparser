@@ -23,7 +23,7 @@ dependencies {
 </ol>
 
 ```
-DiffParser parser = new GitHubDiffParser();
+GitHubDiffParser parser = new GitHubDiffParser();
 InputStream in = new FileInputStream("/path/to/file.diff");
 List<Diff> diff = parser.parse(in);
 ```
