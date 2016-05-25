@@ -96,22 +96,22 @@ public class UnifiedDiffParser implements DiffParser {
         return parsedDiffs;
     }
 
-    private void parseNeutralLine(Diff currentDiff, String currentLine) {
+    protected void parseNeutralLine(Diff currentDiff, String currentLine) {
         Line line = new Line(Line.LineType.NEUTRAL, currentLine);
         currentDiff.getLatestHunk().getLines().add(line);
     }
 
-    private void parseToLine(Diff currentDiff, String currentLine) {
+    protected void parseToLine(Diff currentDiff, String currentLine) {
         Line toLine = new Line(Line.LineType.TO, currentLine.substring(1));
         currentDiff.getLatestHunk().getLines().add(toLine);
     }
 
-    private void parseFromLine(Diff currentDiff, String currentLine) {
+    protected void parseFromLine(Diff currentDiff, String currentLine) {
         Line fromLine = new Line(Line.LineType.FROM, currentLine.substring(1));
         currentDiff.getLatestHunk().getLines().add(fromLine);
     }
 
-    private void parseHunkStart(Diff currentDiff, String currentLine) {
+    protected void parseHunkStart(Diff currentDiff, String currentLine) {
         Matcher matcher = HUNK_START_PATTERN.matcher(currentLine);
         
         if (matcher.matches()) {
@@ -133,18 +133,18 @@ public class UnifiedDiffParser implements DiffParser {
         }
     }
 
-    private void parseToFile(Diff currentDiff, String currentLine) {
+    protected void parseToFile(Diff currentDiff, String currentLine) {
         currentDiff.setToFileName(cutAfterTab(currentLine.substring(4)));
     }
 
-    private void parseFromFile(Diff currentDiff, String currentLine) {
+    protected void parseFromFile(Diff currentDiff, String currentLine) {
         currentDiff.setFromFileName(cutAfterTab(currentLine.substring(4)));
     }
 
     /**
      * Cuts a TAB and all following characters from a String.
      */
-    private String cutAfterTab(String line) {
+    protected String cutAfterTab(String line) {
         Pattern p = Pattern.compile("^(.*)\\t.*$");
         Matcher matcher = p.matcher(line);
         if (matcher.matches()) {
@@ -154,10 +154,9 @@ public class UnifiedDiffParser implements DiffParser {
         }
     }
 
-    private void parseHeader(Diff currentDiff, String currentLine) {
+    protected void parseHeader(Diff currentDiff, String currentLine) {
         currentDiff.getHeaderLines().add(currentLine);
     }
-
 
     @Override
     public List<Diff> parse(byte[] bytes) {
