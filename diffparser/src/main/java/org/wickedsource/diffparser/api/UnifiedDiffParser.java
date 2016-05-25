@@ -36,11 +36,13 @@ public class UnifiedDiffParser implements DiffParser {
     public List<Diff> parse(InputStream in) {
         ResizingParseWindow window = new ResizingParseWindow(in);
         ParserState state = ParserState.INITIAL;
+        ParserState targetState;
         List<Diff> parsedDiffs = new ArrayList<>();
         Diff currentDiff = new Diff();
         String currentLine;
         while ((currentLine = window.slideForward()) != null) {
-            state = state.nextState(window);
+            targetState = state.nextState(window);
+            
             switch (state) {
                 case INITIAL:
                     // nothing to do
@@ -73,6 +75,8 @@ public class UnifiedDiffParser implements DiffParser {
                 default:
                     throw new IllegalStateException(String.format("Illegal parser state '%s", state));
             }
+            
+            state = targetState;
         }
 
         return parsedDiffs;
