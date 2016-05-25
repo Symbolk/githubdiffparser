@@ -1,4 +1,4 @@
-package com.github.stkent.githubdiffparser.unified;
+package com.github.stkent.githubdiffparser;
 
 import java.util.regex.Pattern;
 

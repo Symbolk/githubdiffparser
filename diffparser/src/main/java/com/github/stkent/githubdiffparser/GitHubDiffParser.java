@@ -13,15 +13,12 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.github.stkent.githubdiffparser.api;
+package com.github.stkent.githubdiffparser;
 
-import com.github.stkent.githubdiffparser.api.model.Diff;
-import com.github.stkent.githubdiffparser.api.model.Hunk;
-import com.github.stkent.githubdiffparser.api.model.Line;
-import com.github.stkent.githubdiffparser.api.model.Range;
-import com.github.stkent.githubdiffparser.unified.Constants;
-import com.github.stkent.githubdiffparser.unified.ParserState;
-import com.github.stkent.githubdiffparser.unified.ResizingParseWindow;
+import com.github.stkent.githubdiffparser.models.Diff;
+import com.github.stkent.githubdiffparser.models.Hunk;
+import com.github.stkent.githubdiffparser.models.Line;
+import com.github.stkent.githubdiffparser.models.Range;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -32,9 +29,8 @@ import java.util.regex.Pattern;
 import static java.util.Arrays.asList;
 
 @SuppressWarnings("WeakerAccess")
-public class GitHubDiffParser implements DiffParser {
+public class GitHubDiffParser {
     
-    @Override
     public List<Diff> parse(InputStream in) {
         ResizingParseWindow window = new ResizingParseWindow(in);
         ParserState state = ParserState.INITIAL;
@@ -95,22 +91,30 @@ public class GitHubDiffParser implements DiffParser {
         return parsedDiffs;
     }
 
-    protected void parseNeutralLine(Diff currentDiff, String currentLine) {
+    public List<Diff> parse(byte[] bytes) {
+        return parse(new ByteArrayInputStream(bytes));
+    }
+
+    public List<Diff> parse(File file) throws IOException {
+        return parse(new FileInputStream(file));
+    }
+
+    private void parseNeutralLine(Diff currentDiff, String currentLine) {
         Line line = new Line(Line.LineType.NEUTRAL, currentLine);
         currentDiff.getLatestHunk().getLines().add(line);
     }
 
-    protected void parseToLine(Diff currentDiff, String currentLine) {
+    private void parseToLine(Diff currentDiff, String currentLine) {
         Line toLine = new Line(Line.LineType.TO, currentLine.substring(1));
         currentDiff.getLatestHunk().getLines().add(toLine);
     }
 
-    protected void parseFromLine(Diff currentDiff, String currentLine) {
+    private void parseFromLine(Diff currentDiff, String currentLine) {
         Line fromLine = new Line(Line.LineType.FROM, currentLine.substring(1));
         currentDiff.getLatestHunk().getLines().add(fromLine);
     }
 
-    protected void parseHunkStart(Diff currentDiff, String currentLine) {
+    private void parseHunkStart(Diff currentDiff, String currentLine) {
         Matcher matcher = Constants.HUNK_START_PATTERN.matcher(currentLine);
         
         if (matcher.matches()) {
@@ -132,7 +136,7 @@ public class GitHubDiffParser implements DiffParser {
         }
     }
 
-    protected void parseFromFile(final Diff currentDiff, final String currentLine) {
+    private void parseFromFile(final Diff currentDiff, final String currentLine) {
         String fileName = cutAfterTab(currentLine.substring(4)).trim();
         
         /* 
@@ -146,7 +150,7 @@ public class GitHubDiffParser implements DiffParser {
         currentDiff.setFromFileName(fileName);
     }
 
-    protected void parseToFile(final Diff currentDiff, final String currentLine) {
+    private void parseToFile(final Diff currentDiff, final String currentLine) {
         String fileName = cutAfterTab(currentLine.substring(4)).trim();
         
         /* 
@@ -163,7 +167,7 @@ public class GitHubDiffParser implements DiffParser {
     /**
      * Cuts a TAB and all following characters from a String.
      */
-    protected String cutAfterTab(String line) {
+    private String cutAfterTab(String line) {
         Pattern p = Pattern.compile("^(.*)\\t.*$");
         Matcher matcher = p.matcher(line);
         if (matcher.matches()) {
@@ -173,18 +177,8 @@ public class GitHubDiffParser implements DiffParser {
         }
     }
 
-    protected void parseHeader(Diff currentDiff, String currentLine) {
+    private void parseHeader(Diff currentDiff, String currentLine) {
         currentDiff.getHeaderLines().add(currentLine);
-    }
-
-    @Override
-    public List<Diff> parse(byte[] bytes) {
-        return parse(new ByteArrayInputStream(bytes));
-    }
-
-    @Override
-    public List<Diff> parse(File file) throws IOException {
-        return parse(new FileInputStream(file));
     }
 
 }

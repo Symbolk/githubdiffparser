@@ -13,12 +13,12 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.github.stkent.githubdiffparser.unified;
+package com.github.stkent.githubdiffparser;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.github.stkent.githubdiffparser.unified.Constants.HUNK_START_PATTERN;
+import static com.github.stkent.githubdiffparser.Constants.HUNK_START_PATTERN;
 
 /**
  * State machine for a parser parsing a unified diff.

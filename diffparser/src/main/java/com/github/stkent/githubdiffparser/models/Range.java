@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.github.stkent.githubdiffparser.api.model;
+package com.github.stkent.githubdiffparser.models;
 
 /**
  * Represents a range of line numbers that spans a window on a text file.

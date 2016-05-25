@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.github.stkent.githubdiffparser.unified;
+package com.github.stkent.githubdiffparser;
 
 public interface ParseWindow {
 
