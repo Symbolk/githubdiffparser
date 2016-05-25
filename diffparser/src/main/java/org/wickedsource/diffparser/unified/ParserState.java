@@ -25,6 +25,7 @@ import static org.wickedsource.diffparser.unified.Constants.HUNK_START_PATTERN;
  *
  * @author Tom Hombergs <tom.hombergs@gmail.com>
  */
+@SuppressWarnings("Duplicates")
 public enum ParserState {
 
     /**
