@@ -32,6 +32,7 @@
  */
 package com.github.stkent.githubdiffparser;
 
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,8 +50,9 @@ enum ParserState {
      * This is the initial state of the parser.
      */
     INITIAL {
+        @NotNull
         @Override
-        public ParserState nextState(ParseWindow window) {
+        public ParserState nextState(@NotNull final ParseWindow window) {
             String line = window.getFocusLine();
             
             if (matchesFromFilePattern(line)) {
@@ -65,8 +67,9 @@ enum ParserState {
      * The parser is in this state if it is currently parsing a header line.
      */
     HEADER {
+        @NotNull
         @Override
-        public ParserState nextState(ParseWindow window) {
+        public ParserState nextState(@NotNull final ParseWindow window) {
             String line = window.getFocusLine();
             
             if (matchesFromFilePattern(line)) {
@@ -85,8 +88,9 @@ enum ParserState {
      * {@code --- /path/to/file.txt}
      */
     FROM_FILE {
+        @NotNull
         @Override
-        public ParserState nextState(ParseWindow window) {
+        public ParserState nextState(@NotNull final ParseWindow window) {
             String line = window.getFocusLine();
             
             if (matchesToFilePattern(line)) {
@@ -105,8 +109,9 @@ enum ParserState {
      * {@code +++ /path/to/file.txt}
      */
     TO_FILE {
+        @NotNull
         @Override
-        public ParserState nextState(ParseWindow window) {
+        public ParserState nextState(@NotNull final ParseWindow window) {
             String line = window.getFocusLine();
             
             if (matchesHunkStartPattern(line)) {
@@ -125,8 +130,9 @@ enum ParserState {
      * {@code @@ -1,5 +2,6 @@}
      */
     HUNK_START {
+        @NotNull
         @Override
-        public ParserState nextState(ParseWindow window) {
+        public ParserState nextState(@NotNull final ParseWindow window) {
             String line = window.getFocusLine();
             
             if (matchesFromLinePattern(line)) {
@@ -148,8 +154,9 @@ enum ParserState {
      * {@code - only the dash at the start is important}
      */
     FROM_LINE {
+        @NotNull
         @Override
-        public ParserState nextState(ParseWindow window) {
+        public ParserState nextState(@NotNull final ParseWindow window) {
             String line = window.getFocusLine();
 
             if (matchesFromLinePattern(line)) {
@@ -181,8 +188,9 @@ enum ParserState {
      * {@code + only the plus at the start is important}
      */
     TO_LINE {
+        @NotNull
         @Override
-        public ParserState nextState(ParseWindow window) {
+        public ParserState nextState(@NotNull final ParseWindow window) {
             String line = window.getFocusLine();
 
             if (matchesFromLinePattern(line)) {
@@ -210,8 +218,9 @@ enum ParserState {
      * contain any string.
      */
     NEUTRAL_LINE {
+        @NotNull
         @Override
-        public ParserState nextState(ParseWindow window) {
+        public ParserState nextState(@NotNull final ParseWindow window) {
             String line = window.getFocusLine();
             
             if (matchesFromLinePattern(line)) {
@@ -239,8 +248,9 @@ enum ParserState {
      * Assumption: there is at most one delimiter line between diffs.
      */
     DELIMITER {
+        @NotNull
         @Override
-        public ParserState nextState(ParseWindow window) {
+        public ParserState nextState(@NotNull final ParseWindow window) {
             String line = window.getFocusLine();
             
             return transition(line, INITIAL);
@@ -256,42 +266,43 @@ enum ParserState {
      * @param window the window around the line currently being parsed.
      * @return the next state of the state machine.
      */
-    public abstract ParserState nextState(ParseWindow window);
+    @NotNull
+    public abstract ParserState nextState(@NotNull final ParseWindow window);
 
     protected ParserState transition(final String currentLine, final ParserState toState) {
         logger.debug(String.format("%12s -> %12s: %s", this, toState, currentLine));
         return toState;
     }
 
-    protected boolean matchesFromFilePattern(String line) {
+    protected boolean matchesFromFilePattern(@NotNull final String line) {
         return line.startsWith("---");
     }
 
-    protected boolean matchesToFilePattern(String line) {
+    protected boolean matchesToFilePattern(@NotNull final String line) {
         return line.startsWith("+++");
     }
 
-    protected boolean matchesFromLinePattern(String line) {
+    protected boolean matchesFromLinePattern(@NotNull final String line) {
         return line.startsWith("-");
     }
 
-    protected boolean matchesToLinePattern(String line) {
+    protected boolean matchesToLinePattern(@NotNull final String line) {
         return line.startsWith("+");
     }
     
-    protected boolean matchesNeutralLinePattern(String line) {
+    protected boolean matchesNeutralLinePattern(@NotNull final String line) {
         return line.startsWith(" ");
     }
     
-    protected boolean matchesDelimiterPattern(String line) {
+    protected boolean matchesDelimiterPattern(@NotNull final String line) {
         return line.isEmpty();
     }
 
-    protected boolean matchesNoNewlineAtEndOfFileLinePattern(String line) {
+    protected boolean matchesNoNewlineAtEndOfFileLinePattern(@NotNull final String line) {
         return line.contains("\\ No newline at end of file");
     }
 
-    protected boolean matchesHunkStartPattern(String line) {
+    protected boolean matchesHunkStartPattern(@NotNull final String line) {
         return HUNK_START_PATTERN.matcher(line).matches();
     }
 
