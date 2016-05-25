@@ -213,8 +213,8 @@ public enum ParserState {
     },
 
     /**
-     * The parser is in this state if it is currently parsing a line that is the delimiter between two Diffs. This line is always a new
-     * line.
+     * The parser is in this state if it is currently parsing a line that is the delimiter between two Diffs.
+     * Assumption: there is at most one delimiter line between diffs.
      */
     DELIMITER {
         @Override
