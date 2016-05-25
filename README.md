@@ -26,7 +26,7 @@ Modified: trunk/test1.txt
  test1
 -test1
 +test234
-
+ 
 -test1
 \ No newline at end of file
 @@ -5,9 +6,10 @@
