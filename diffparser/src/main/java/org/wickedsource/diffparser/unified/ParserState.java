@@ -135,7 +135,7 @@ public enum ParserState {
                 return transition(line, FROM_LINE);
             } else if (matchesToLinePattern(line)) {
                 return transition(line, TO_LINE);
-            } else if (matchesNeutralLinePattern(line)) {
+            } else if (matchesNeutralLinePattern(line) || matchesNoNewlineAtEndOfFileLinePattern(line)) {
                 return transition(line, NEUTRAL_LINE);
             } else if (matchesHunkStartPattern(line)) {
                 return transition(line, HUNK_START);
@@ -167,7 +167,7 @@ public enum ParserState {
                 return transition(line, FROM_LINE);
             } else if (matchesToLinePattern(line)) {
                 return transition(line, TO_LINE);
-            } else if (matchesNeutralLinePattern(line)) {
+            } else if (matchesNeutralLinePattern(line) || matchesNoNewlineAtEndOfFileLinePattern(line)) {
                 return transition(line, NEUTRAL_LINE);
             } else if (matchesHunkStartPattern(line)) {
                 return transition(line, HUNK_START);
@@ -196,7 +196,7 @@ public enum ParserState {
                 return transition(line, FROM_LINE);
             } else if (matchesToLinePattern(line)) {
                 return transition(line, TO_LINE);
-            } else if (matchesNeutralLinePattern(line)) {
+            } else if (matchesNeutralLinePattern(line) || matchesNoNewlineAtEndOfFileLinePattern(line)) {
                 return transition(line, NEUTRAL_LINE);
             } else if (matchesHunkStartPattern(line)) {
                 return transition(line, HUNK_START);
@@ -263,6 +263,10 @@ public enum ParserState {
     
     protected boolean matchesDelimiterPattern(String line) {
         return line.isEmpty();
+    }
+
+    protected boolean matchesNoNewlineAtEndOfFileLinePattern(String line) {
+        return line.contains("\\ No newline at end of file");
     }
 
     protected boolean matchesHunkStartPattern(String line) {
