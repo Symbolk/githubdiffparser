@@ -27,9 +27,9 @@ targetCompatibility = 1.8
 ext {
     // Library info:
     libraryVersion = '1.2'
-    libraryName = 'github-diff-parser'
+    libraryName = 'githubdiffparser'
     libraryGroupId = 'com.github.stkent'
-    libraryArtifactId = 'github-diff-parser'
+    libraryArtifactId = 'githubdiffparser'
     libraryDescription = 'Diff parser that handles GitHub diff formatting.'
     libraryInceptionYear = '2016'
     libraryGitHubRepoName = 'stkent/github-diff-parser'

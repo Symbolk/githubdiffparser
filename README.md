@@ -1,43 +1,36 @@
-### diffparser
+### githubdiffparser
 
-Parse diffs with Java.
+Parse GitHub diffs with Java. Modified fork of [diffparser](https://github.com/thombergs/diffparser).
 
-### Code example
+### Getting Started
 
-For a diff in [Unified format](https://en.wikipedia.org/wiki/Diff_utility#Unified_format):
+<ol>
+  <li>Specify githubdiffparser as a dependency in your build.gradle file:</li>
+</ol>
+
+```groovy
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'com.github.stkent:githubdiffparser:1.2'
+}
+```
+
+<ol start="2">
+  <li>Parse GitHub diffs!</li>
+</ol>
 
 ```
-DiffParser parser = new UnifiedDiffParser();
+DiffParser parser = new GitHubDiffParser();
 InputStream in = new FileInputStream("/path/to/file.diff");
 List<Diff> diff = parser.parse(in);
 ```
 
-### Maven coordinates
-TODO: update
+### GitHub diff format
 
-### What Diff formats can be parsed?
-Currently, the only implementation of the DiffParser interface is UnifiedDiffParser, which supports parsing of diffs like the following:
-```diff
-Modified: trunk/test1.txt
-===================================================================
---- /trunk/test1.txt	2013-10-23 19:41:56 UTC (rev 46)
-+++ /trunk/test1.txt	2013-10-23 19:44:39 UTC (rev 47)
-@@ -1,4 +1,3 @@
- test1
--test1
-+test234
- 
--test1
-\ No newline at end of file
-@@ -5,9 +6,10 @@
--test1
--test1
-+aösdhasd
-+asdasd
-```
-
-An input stream may contain several sections like the above, delimited by an empty line. Each such section will be parsed into an object
-of class Diff.
+_// TODO: give an example; explain how GitHub diffs appear to deviate from the unified diff spec._
 
 The most detailed description of the unified diff format may be found [here](http://www.gnu.org/software/diffutils/manual/html_node/Detailed-Unified.html#Detailed-Unified):
 
