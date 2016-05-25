@@ -1,10 +1,10 @@
-package org.wickedsource.diffparser.api;
+package com.github.stkent.githubdiffparser.api;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.wickedsource.diffparser.api.model.Diff;
-import org.wickedsource.diffparser.api.model.Hunk;
-import org.wickedsource.diffparser.api.model.Line;
+import com.github.stkent.githubdiffparser.api.model.Diff;
+import com.github.stkent.githubdiffparser.api.model.Hunk;
+import com.github.stkent.githubdiffparser.api.model.Line;
 
 import java.io.InputStream;
 import java.util.List;

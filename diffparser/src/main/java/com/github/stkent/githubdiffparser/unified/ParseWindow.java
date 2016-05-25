@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.wickedsource.diffparser.unified;
+package com.github.stkent.githubdiffparser.unified;
 
 public interface ParseWindow {
 

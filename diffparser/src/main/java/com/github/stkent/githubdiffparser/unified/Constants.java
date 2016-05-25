@@ -1,4 +1,4 @@
-package org.wickedsource.diffparser.unified;
+package com.github.stkent.githubdiffparser.unified;
 
 import java.util.regex.Pattern;
 

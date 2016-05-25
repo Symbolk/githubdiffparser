@@ -13,12 +13,12 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.wickedsource.diffparser.unified;
+package com.github.stkent.githubdiffparser.unified;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.wickedsource.diffparser.unified.Constants.HUNK_START_PATTERN;
+import static com.github.stkent.githubdiffparser.unified.Constants.HUNK_START_PATTERN;
 
 /**
  * State machine for a parser parsing a unified diff.

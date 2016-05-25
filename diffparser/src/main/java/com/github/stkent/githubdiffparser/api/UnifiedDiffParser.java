@@ -13,14 +13,15 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.wickedsource.diffparser.api;
+package com.github.stkent.githubdiffparser.api;
 
-import org.wickedsource.diffparser.api.model.Diff;
-import org.wickedsource.diffparser.api.model.Hunk;
-import org.wickedsource.diffparser.api.model.Line;
-import org.wickedsource.diffparser.api.model.Range;
-import org.wickedsource.diffparser.unified.ParserState;
-import org.wickedsource.diffparser.unified.ResizingParseWindow;
+import com.github.stkent.githubdiffparser.api.model.Diff;
+import com.github.stkent.githubdiffparser.api.model.Hunk;
+import com.github.stkent.githubdiffparser.api.model.Line;
+import com.github.stkent.githubdiffparser.api.model.Range;
+import com.github.stkent.githubdiffparser.unified.Constants;
+import com.github.stkent.githubdiffparser.unified.ParserState;
+import com.github.stkent.githubdiffparser.unified.ResizingParseWindow;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -29,8 +30,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static java.util.Arrays.asList;
-import static org.wickedsource.diffparser.unified.Constants.HUNK_START_PATTERN;
-import static org.wickedsource.diffparser.unified.ParserState.*;
 
 @SuppressWarnings("WeakerAccess")
 public class UnifiedDiffParser implements DiffParser {
@@ -52,7 +51,7 @@ public class UnifiedDiffParser implements DiffParser {
                     // nothing to do
                     break;
                 case HEADER:
-                    if (asList(FROM_LINE, TO_LINE, NEUTRAL_LINE).contains(state)) {
+                    if (asList(ParserState.FROM_LINE, ParserState.TO_LINE, ParserState.NEUTRAL_LINE).contains(state)) {
                         parsedDiffs.add(currentDiff);
                         currentDiff = new Diff();
                     }
@@ -60,7 +59,7 @@ public class UnifiedDiffParser implements DiffParser {
                     parseHeader(currentDiff, currentLine);
                     break;
                 case FROM_FILE:
-                    if (asList(FROM_LINE, TO_LINE, NEUTRAL_LINE).contains(state)) {
+                    if (asList(ParserState.FROM_LINE, ParserState.TO_LINE, ParserState.NEUTRAL_LINE).contains(state)) {
                         parsedDiffs.add(currentDiff);
                         currentDiff = new Diff();
                     }
@@ -112,7 +111,7 @@ public class UnifiedDiffParser implements DiffParser {
     }
 
     protected void parseHunkStart(Diff currentDiff, String currentLine) {
-        Matcher matcher = HUNK_START_PATTERN.matcher(currentLine);
+        Matcher matcher = Constants.HUNK_START_PATTERN.matcher(currentLine);
         
         if (matcher.matches()) {
             String range1Start = matcher.group(1);

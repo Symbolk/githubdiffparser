@@ -1,6 +1,6 @@
-package org.wickedsource.diffparser.api;
+package com.github.stkent.githubdiffparser.api;
 
-import org.wickedsource.diffparser.api.model.Diff;
+import com.github.stkent.githubdiffparser.api.model.Diff;
 
 @SuppressWarnings("WeakerAccess")
 public class GitHubDiffParser extends UnifiedDiffParser {
