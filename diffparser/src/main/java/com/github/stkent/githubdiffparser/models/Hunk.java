@@ -98,7 +98,7 @@ public class Hunk {
     }
     
     public boolean containsToFileLineNumber(final int toFileLineNumber) {
-        return toFileRange.contains(toFileLineNumber);
+        return getHunkLineNumberForToFileLineNumber(toFileLineNumber) != null;
     }
 
     @Nullable
