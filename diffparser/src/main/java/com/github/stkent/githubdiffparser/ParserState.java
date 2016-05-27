@@ -33,8 +33,6 @@
 package com.github.stkent.githubdiffparser;
 
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static com.github.stkent.githubdiffparser.Constants.HUNK_START_PATTERN;
 
@@ -52,13 +50,13 @@ enum ParserState {
     INITIAL {
         @NotNull
         @Override
-        public ParserState nextState(@NotNull final ParseWindow window) {
+        public ParserState nextState(@NotNull final ParseWindow window, final boolean logToSout) {
             String line = window.getFocusLine();
             
             if (matchesFromFilePattern(line)) {
-                return transition(line, FROM_FILE);
+                return transition(line, FROM_FILE, logToSout);
             } else {
-                return transition(line, HEADER);
+                return transition(line, HEADER, logToSout);
             }
         }
     },
@@ -69,13 +67,13 @@ enum ParserState {
     HEADER {
         @NotNull
         @Override
-        public ParserState nextState(@NotNull final ParseWindow window) {
+        public ParserState nextState(@NotNull final ParseWindow window, final boolean logToSout) {
             String line = window.getFocusLine();
             
             if (matchesFromFilePattern(line)) {
-                return transition(line, FROM_FILE);
+                return transition(line, FROM_FILE, logToSout);
             } else {
-                return transition(line, HEADER);
+                return transition(line, HEADER, logToSout);
             }
         }
     },
@@ -90,11 +88,11 @@ enum ParserState {
     FROM_FILE {
         @NotNull
         @Override
-        public ParserState nextState(@NotNull final ParseWindow window) {
+        public ParserState nextState(@NotNull final ParseWindow window, final boolean logToSout) {
             String line = window.getFocusLine();
             
             if (matchesToFilePattern(line)) {
-                return transition(line, TO_FILE);
+                return transition(line, TO_FILE, logToSout);
             } else {
                 throw new IllegalStateException("A FROM_FILE line ('---') must be directly followed by a TO_FILE line ('+++')!");
             }
@@ -111,11 +109,11 @@ enum ParserState {
     TO_FILE {
         @NotNull
         @Override
-        public ParserState nextState(@NotNull final ParseWindow window) {
+        public ParserState nextState(@NotNull final ParseWindow window, final boolean logToSout) {
             String line = window.getFocusLine();
             
             if (matchesHunkStartPattern(line)) {
-                return transition(line, HUNK_START);
+                return transition(line, HUNK_START, logToSout);
             } else {
                 throw new IllegalStateException("A TO_FILE line ('+++') must be directly followed by a HUNK_START line ('@@')!");
             }
@@ -132,15 +130,15 @@ enum ParserState {
     HUNK_START {
         @NotNull
         @Override
-        public ParserState nextState(@NotNull final ParseWindow window) {
+        public ParserState nextState(@NotNull final ParseWindow window, final boolean logToSout) {
             String line = window.getFocusLine();
             
             if (matchesFromLinePattern(line)) {
-                return transition(line, FROM_LINE);
+                return transition(line, FROM_LINE, logToSout);
             } else if (matchesToLinePattern(line)) {
-                return transition(line, TO_LINE);
+                return transition(line, TO_LINE, logToSout);
             } else {
-                return transition(line, NEUTRAL_LINE);
+                return transition(line, NEUTRAL_LINE, logToSout);
             }
         }
     },
@@ -156,24 +154,24 @@ enum ParserState {
     FROM_LINE {
         @NotNull
         @Override
-        public ParserState nextState(@NotNull final ParseWindow window) {
+        public ParserState nextState(@NotNull final ParseWindow window, final boolean logToSout) {
             String line = window.getFocusLine();
 
             if (matchesFromLinePattern(line)) {
-                return transition(line, FROM_LINE);
+                return transition(line, FROM_LINE, logToSout);
             } else if (matchesToLinePattern(line)) {
-                return transition(line, TO_LINE);
+                return transition(line, TO_LINE, logToSout);
             } else if (matchesNeutralLinePattern(line) || matchesNoNewlineAtEndOfFileLinePattern(line)) {
-                return transition(line, NEUTRAL_LINE);
+                return transition(line, NEUTRAL_LINE, logToSout);
             } else if (matchesHunkStartPattern(line)) {
-                return transition(line, HUNK_START);
+                return transition(line, HUNK_START, logToSout);
             } else if (matchesDelimiterPattern(line)) {
-                return transition(line, DELIMITER);
+                return transition(line, DELIMITER, logToSout);
             } else {
                 if (matchesFromFilePattern(line)) {
-                    return transition(line, FROM_FILE);
+                    return transition(line, FROM_FILE, logToSout);
                 } else {
-                    return transition(line, HEADER);
+                    return transition(line, HEADER, logToSout);
                 }
             }
         }
@@ -190,24 +188,24 @@ enum ParserState {
     TO_LINE {
         @NotNull
         @Override
-        public ParserState nextState(@NotNull final ParseWindow window) {
+        public ParserState nextState(@NotNull final ParseWindow window, final boolean logToSout) {
             String line = window.getFocusLine();
 
             if (matchesFromLinePattern(line)) {
-                return transition(line, FROM_LINE);
+                return transition(line, FROM_LINE, logToSout);
             } else if (matchesToLinePattern(line)) {
-                return transition(line, TO_LINE);
+                return transition(line, TO_LINE, logToSout);
             } else if (matchesNeutralLinePattern(line) || matchesNoNewlineAtEndOfFileLinePattern(line)) {
-                return transition(line, NEUTRAL_LINE);
+                return transition(line, NEUTRAL_LINE, logToSout);
             } else if (matchesHunkStartPattern(line)) {
-                return transition(line, HUNK_START);
+                return transition(line, HUNK_START, logToSout);
             } else if (matchesDelimiterPattern(line)) {
-                return transition(line, DELIMITER);
+                return transition(line, DELIMITER, logToSout);
             } else {
                 if (matchesFromFilePattern(line)) {
-                    return transition(line, FROM_FILE);
+                    return transition(line, FROM_FILE, logToSout);
                 } else {
-                    return transition(line, HEADER);
+                    return transition(line, HEADER, logToSout);
                 }
             }
         }
@@ -220,24 +218,24 @@ enum ParserState {
     NEUTRAL_LINE {
         @NotNull
         @Override
-        public ParserState nextState(@NotNull final ParseWindow window) {
+        public ParserState nextState(@NotNull final ParseWindow window, final boolean logToSout) {
             String line = window.getFocusLine();
             
             if (matchesFromLinePattern(line)) {
-                return transition(line, FROM_LINE);
+                return transition(line, FROM_LINE, logToSout);
             } else if (matchesToLinePattern(line)) {
-                return transition(line, TO_LINE);
+                return transition(line, TO_LINE, logToSout);
             } else if (matchesNeutralLinePattern(line) || matchesNoNewlineAtEndOfFileLinePattern(line)) {
-                return transition(line, NEUTRAL_LINE);
+                return transition(line, NEUTRAL_LINE, logToSout);
             } else if (matchesHunkStartPattern(line)) {
-                return transition(line, HUNK_START);
+                return transition(line, HUNK_START, logToSout);
             } else if (matchesDelimiterPattern(line)) {
-                return transition(line, DELIMITER);
+                return transition(line, DELIMITER, logToSout);
             } else {
                 if (matchesFromFilePattern(line)) {
-                    return transition(line, FROM_FILE);
+                    return transition(line, FROM_FILE, logToSout);
                 } else {
-                    return transition(line, HEADER);
+                    return transition(line, HEADER, logToSout);
                 }
             }
         }
@@ -250,14 +248,12 @@ enum ParserState {
     DELIMITER {
         @NotNull
         @Override
-        public ParserState nextState(@NotNull final ParseWindow window) {
+        public ParserState nextState(@NotNull final ParseWindow window, final boolean logToSout) {
             String line = window.getFocusLine();
             
-            return transition(line, INITIAL);
+            return transition(line, INITIAL, logToSout);
         }
     };
-
-    protected static Logger logger = LoggerFactory.getLogger(ParserState.class);
 
     /**
      * Returns the next state of the state machine depending on the current state and the content of a window of lines around the line
@@ -267,10 +263,13 @@ enum ParserState {
      * @return the next state of the state machine.
      */
     @NotNull
-    public abstract ParserState nextState(@NotNull final ParseWindow window);
+    public abstract ParserState nextState(@NotNull final ParseWindow window, final boolean logToSout);
 
-    protected ParserState transition(final String currentLine, final ParserState toState) {
-        logger.debug(String.format("%12s -> %12s: %s", this, toState, currentLine));
+    protected ParserState transition(final String currentLine, final ParserState toState, final boolean logToSout) {
+        if (logToSout) {
+            System.out.println(String.format("%12s -> %12s: %s", this, toState, currentLine));
+        }
+        
         return toState;
     }
 

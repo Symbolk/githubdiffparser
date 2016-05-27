@@ -49,6 +49,16 @@ import static java.util.Arrays.asList;
 @SuppressWarnings("WeakerAccess")
 public class GitHubDiffParser {
     
+    private final boolean logToSout;
+
+    public GitHubDiffParser() {
+        this(false);
+    }
+
+    public GitHubDiffParser(final boolean logToSout) {
+        this.logToSout = logToSout;
+    }
+
     @NotNull
     public List<Diff> parse(InputStream in) {
         ResizingParseWindow window = new ResizingParseWindow(in);
@@ -59,7 +69,7 @@ public class GitHubDiffParser {
         String currentLine;
 
         while ((currentLine = window.slideForward()) != null) {
-            targetState = state.nextState(window);
+            targetState = state.nextState(window, logToSout);
             
             switch (targetState) {
                 case INITIAL:
