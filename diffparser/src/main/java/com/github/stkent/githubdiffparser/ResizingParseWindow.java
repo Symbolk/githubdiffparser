@@ -130,20 +130,6 @@ public class ResizingParseWindow implements ParseWindow {
             nextLine = reader.readLine();
         }
 
-        return getNextLineOrVirtualBlankLineAtEndOfStream(nextLine);
-    }
-
-    /**
-     * Guarantees that a virtual blank line is injected at the end of the input
-     * stream to ensure the parser attempts to transition to the {@code DELIMITER}
-     * state, if necessary, when the end of stream is reached.
-     */
-    private String getNextLineOrVirtualBlankLineAtEndOfStream(String nextLine) {
-        if ((nextLine == null) && !isEndOfStream) {
-            isEndOfStream = true;
-            return "";
-        }
-
         return nextLine;
     }
 
