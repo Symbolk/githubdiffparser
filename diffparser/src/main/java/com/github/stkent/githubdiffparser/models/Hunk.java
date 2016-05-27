@@ -47,7 +47,6 @@ import java.util.stream.Collectors;
  *
  * @author Tom Hombergs [tom.hombergs@gmail.com]
  */
-@SuppressWarnings("UnusedDeclaration")
 public class Hunk {
 
     private Range fromFileRange;
@@ -89,10 +88,6 @@ public class Hunk {
 
     public void setToFileRange(Range toFileRange) {
         this.toFileRange = toFileRange;
-    }
-
-    public void setLines(List<Line> lines) {
-        this.lines = lines;
     }
 
     /**
