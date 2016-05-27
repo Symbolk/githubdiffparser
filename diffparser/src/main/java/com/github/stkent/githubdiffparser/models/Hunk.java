@@ -32,8 +32,11 @@
  */
 package com.github.stkent.githubdiffparser.models;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Represents a "hunk" of changes made to a file.
@@ -91,4 +94,31 @@ public class Hunk {
     public void setLines(List<Line> lines) {
         this.lines = lines;
     }
+
+    /**
+     * @return the total number of lines in this Hunk (does not include hunk header line)
+     */
+    public int getNumberOfLines() {
+        return lines.size();
+    }
+    
+    public boolean containsToFileLineNumber(final int toFileLineNumber) {
+        return toFileRange.contains(toFileLineNumber);
+    }
+
+    @Nullable
+    public Integer getHunkLineNumberForToFileLineNumber(final int toFileLineNumber) {
+        if (!containsToFileLineNumber(toFileLineNumber)) {
+            return null;
+        }
+        
+        final List<Line> toLines = lines.stream()
+                .filter(line -> line.getLineType() == Line.LineType.TO)
+                .collect(Collectors.toList());
+
+        final Line lineToLocate = toLines.get(toFileLineNumber - toFileRange.getLineStart());
+        
+        return lines.indexOf(lineToLocate);
+    }
+    
 }
