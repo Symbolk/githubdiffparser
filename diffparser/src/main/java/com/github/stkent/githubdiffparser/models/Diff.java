@@ -32,6 +32,9 @@
  */
 package com.github.stkent.githubdiffparser.models;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +44,8 @@ import java.util.List;
  * @author Tom Hombergs [tom.hombergs@gmail.com]
  */
 public class Diff {
+    
+    public static final int NUMBER_OF_LINES_PER_DELIMITER = 1;
 
     private String fromFileName;
 
@@ -107,6 +112,39 @@ public class Diff {
     
     public boolean isNotEmpty() {
         return !headerLines.isEmpty() || !hunks.isEmpty();
+    }
+
+    /**
+     * NOTE: result is based on the first line being labelled line number 1, not line number 0!
+     */
+    @Nullable
+    public Integer getDiffLineNumberForToFileLocation(
+            @NotNull final String toFileName,
+            final int toFileLineNumber) {
+        
+        if (!toFileName.equals(this.toFileName)) {
+            return null;
+        }
+
+        int diffLineNumber = headerLines.size() + NUMBER_OF_LINES_PER_DELIMITER;
+        
+        int currentHunkIndex = 0;
+        while (currentHunkIndex < hunks.size()) {
+            diffLineNumber = diffLineNumber + Hunk.NUMBER_OF_LINES_PER_DELIMITER;
+            
+            final Hunk currentHunk = hunks.get(currentHunkIndex);
+            
+            if (currentHunk.containsToFileLineNumber(toFileLineNumber)) {
+                //noinspection ConstantConditions
+                return diffLineNumber + currentHunk.getHunkLineNumberForToFileLineNumber(toFileLineNumber);
+            } else {
+                diffLineNumber += currentHunk.getNumberOfLines();
+            }
+            
+            currentHunkIndex++;
+        }
+        
+        return null;
     }
     
 }

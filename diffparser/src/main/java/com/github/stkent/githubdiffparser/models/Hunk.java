@@ -48,6 +48,8 @@ import java.util.stream.Collectors;
  * @author Tom Hombergs [tom.hombergs@gmail.com]
  */
 public class Hunk {
+    
+    public static final int NUMBER_OF_LINES_PER_DELIMITER = 1;
 
     private Range fromFileRange;
 
