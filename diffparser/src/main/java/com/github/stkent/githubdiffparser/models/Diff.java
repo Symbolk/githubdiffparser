@@ -60,10 +60,6 @@ public class Diff {
         return headerLines;
     }
 
-    public void setHeaderLines(List<String> headerLines) {
-        this.headerLines = headerLines;
-    }
-
     /**
      * Gets the name of the first file that was compared with this Diff (the file "from" which the changes were made,
      * i.e. the "left" file of the diff).
@@ -99,10 +95,6 @@ public class Diff {
 
     public void setToFileName(String toFileName) {
         this.toFileName = toFileName;
-    }
-
-    public void setHunks(List<Hunk> hunks) {
-        this.hunks = hunks;
     }
 
     /**
