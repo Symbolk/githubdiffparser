@@ -44,8 +44,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static java.util.Arrays.asList;
-
 @SuppressWarnings("WeakerAccess")
 public class GitHubDiffParser {
     
@@ -62,37 +60,27 @@ public class GitHubDiffParser {
     @NotNull
     public List<Diff> parse(InputStream in) {
         ResizingParseWindow window = new ResizingParseWindow(in);
-        ParserState state = ParserState.INITIAL;
-        ParserState targetState;
+        ParserState state = ParserState.DIFF_START;
         List<Diff> parsedDiffs = new ArrayList<>();
         Diff currentDiff = new Diff();
         String currentLine;
 
         while ((currentLine = window.slideForward()) != null) {
-            targetState = state.nextState(window, logToSout);
+            state = state.nextState(window, logToSout);
             
-            if (targetState == null) {
+            if (state == null) {
                 throw new IllegalStateException("Parser reached illegal state!");
             }
             
-            switch (targetState) {
-                case INITIAL:
-                    // nothing to do
+            switch (state) {
+                case DIFF_START:
+                    parsedDiffs.add(currentDiff);
+                    currentDiff = new Diff();
                     break;
                 case HEADER:
-                    if (asList(ParserState.FROM_LINE, ParserState.TO_LINE, ParserState.NEUTRAL_LINE).contains(state)) {
-                        parsedDiffs.add(currentDiff);
-                        currentDiff = new Diff();
-                    }
-                    
                     parseHeader(currentDiff, currentLine);
                     break;
                 case FROM_FILE:
-                    if (asList(ParserState.FROM_LINE, ParserState.TO_LINE, ParserState.NEUTRAL_LINE).contains(state)) {
-                        parsedDiffs.add(currentDiff);
-                        currentDiff = new Diff();
-                    }
-                    
                     parseFromFile(currentDiff, currentLine);
                     break;
                 case TO_FILE:
@@ -111,8 +99,6 @@ public class GitHubDiffParser {
                     parseNeutralLine(currentDiff, currentLine);
                     break;
             }
-            
-            state = targetState;
         }
 
         return parsedDiffs;

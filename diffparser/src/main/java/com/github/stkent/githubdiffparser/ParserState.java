@@ -46,9 +46,9 @@ import static com.github.stkent.githubdiffparser.Constants.HUNK_START_PATTERN;
 enum ParserState {
 
     /**
-     * This is the initial state of the parser.
+     * The parser is in this state if it is currently parsing the first line of a new diff.
      */
-    INITIAL {
+    DIFF_START {
         @Nullable
         @Override
         public ParserState nextState(@NotNull final ParseWindow window, final boolean logToSout) {
@@ -71,7 +71,9 @@ enum ParserState {
         public ParserState nextState(@NotNull final ParseWindow window, final boolean logToSout) {
             String line = window.getFocusLine();
             
-            if (matchesFromFilePattern(line)) {
+            if (matchesDiffStartPattern(line)) {
+                return transition(line, DIFF_START, logToSout);
+            } else if (matchesFromFilePattern(line)) {
                 return transition(line, FROM_FILE, logToSout);
             } else {
                 return transition(line, HEADER, logToSout);
@@ -158,7 +160,9 @@ enum ParserState {
         public ParserState nextState(@NotNull final ParseWindow window, final boolean logToSout) {
             String line = window.getFocusLine();
 
-            if (matchesFromLinePattern(line)) {
+            if (matchesDiffStartPattern(line)) {
+                return transition(line, DIFF_START, logToSout);
+            } else if (matchesFromLinePattern(line)) {
                 return transition(line, FROM_LINE, logToSout);
             } else if (matchesToLinePattern(line)) {
                 return transition(line, TO_LINE, logToSout);
@@ -167,11 +171,7 @@ enum ParserState {
             } else if (matchesHunkStartPattern(line)) {
                 return transition(line, HUNK_START, logToSout);
             } else {
-                if (matchesFromFilePattern(line)) {
-                    return transition(line, FROM_FILE, logToSout);
-                } else {
-                    return transition(line, HEADER, logToSout);
-                }
+                return transition(line, HEADER, logToSout);
             }
         }
     },
@@ -190,7 +190,9 @@ enum ParserState {
         public ParserState nextState(@NotNull final ParseWindow window, final boolean logToSout) {
             String line = window.getFocusLine();
 
-            if (matchesFromLinePattern(line)) {
+            if (matchesDiffStartPattern(line)) {
+                return transition(line, DIFF_START, logToSout);
+            } else if (matchesFromLinePattern(line)) {
                 return transition(line, FROM_LINE, logToSout);
             } else if (matchesToLinePattern(line)) {
                 return transition(line, TO_LINE, logToSout);
@@ -199,11 +201,7 @@ enum ParserState {
             } else if (matchesHunkStartPattern(line)) {
                 return transition(line, HUNK_START, logToSout);
             } else {
-                if (matchesFromFilePattern(line)) {
-                    return transition(line, FROM_FILE, logToSout);
-                } else {
-                    return transition(line, HEADER, logToSout);
-                }
+                return transition(line, HEADER, logToSout);
             }
         }
     },
@@ -217,8 +215,10 @@ enum ParserState {
         @Override
         public ParserState nextState(@NotNull final ParseWindow window, final boolean logToSout) {
             String line = window.getFocusLine();
-            
-            if (matchesFromLinePattern(line)) {
+
+            if (matchesDiffStartPattern(line)) {
+                return transition(line, DIFF_START, logToSout);
+            } else if (matchesFromLinePattern(line)) {
                 return transition(line, FROM_LINE, logToSout);
             } else if (matchesToLinePattern(line)) {
                 return transition(line, TO_LINE, logToSout);
@@ -227,11 +227,7 @@ enum ParserState {
             } else if (matchesHunkStartPattern(line)) {
                 return transition(line, HUNK_START, logToSout);
             } else {
-                if (matchesFromFilePattern(line)) {
-                    return transition(line, FROM_FILE, logToSout);
-                } else {
-                    return transition(line, HEADER, logToSout);
-                }
+                return transition(line, HEADER, logToSout);
             }
         }
     };
@@ -252,6 +248,10 @@ enum ParserState {
         }
         
         return toState;
+    }
+
+    protected boolean matchesDiffStartPattern(@NotNull final String line) {
+        return line.startsWith("diff --git");
     }
 
     protected boolean matchesFromFilePattern(@NotNull final String line) {
