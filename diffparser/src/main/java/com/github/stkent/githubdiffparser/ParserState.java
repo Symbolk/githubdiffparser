@@ -33,6 +33,7 @@
 package com.github.stkent.githubdiffparser;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static com.github.stkent.githubdiffparser.Constants.HUNK_START_PATTERN;
 
@@ -48,7 +49,7 @@ enum ParserState {
      * This is the initial state of the parser.
      */
     INITIAL {
-        @NotNull
+        @Nullable
         @Override
         public ParserState nextState(@NotNull final ParseWindow window, final boolean logToSout) {
             String line = window.getFocusLine();
@@ -65,7 +66,7 @@ enum ParserState {
      * The parser is in this state if it is currently parsing a header line.
      */
     HEADER {
-        @NotNull
+        @Nullable
         @Override
         public ParserState nextState(@NotNull final ParseWindow window, final boolean logToSout) {
             String line = window.getFocusLine();
@@ -86,7 +87,7 @@ enum ParserState {
      * {@code --- /path/to/file.txt}
      */
     FROM_FILE {
-        @NotNull
+        @Nullable
         @Override
         public ParserState nextState(@NotNull final ParseWindow window, final boolean logToSout) {
             String line = window.getFocusLine();
@@ -107,7 +108,7 @@ enum ParserState {
      * {@code +++ /path/to/file.txt}
      */
     TO_FILE {
-        @NotNull
+        @Nullable
         @Override
         public ParserState nextState(@NotNull final ParseWindow window, final boolean logToSout) {
             String line = window.getFocusLine();
@@ -128,7 +129,7 @@ enum ParserState {
      * {@code @@ -1,5 +2,6 @@}
      */
     HUNK_START {
-        @NotNull
+        @Nullable
         @Override
         public ParserState nextState(@NotNull final ParseWindow window, final boolean logToSout) {
             String line = window.getFocusLine();
@@ -152,7 +153,7 @@ enum ParserState {
      * {@code - only the dash at the start is important}
      */
     FROM_LINE {
-        @NotNull
+        @Nullable
         @Override
         public ParserState nextState(@NotNull final ParseWindow window, final boolean logToSout) {
             String line = window.getFocusLine();
@@ -186,7 +187,7 @@ enum ParserState {
      * {@code + only the plus at the start is important}
      */
     TO_LINE {
-        @NotNull
+        @Nullable
         @Override
         public ParserState nextState(@NotNull final ParseWindow window, final boolean logToSout) {
             String line = window.getFocusLine();
@@ -216,7 +217,7 @@ enum ParserState {
      * contain any string.
      */
     NEUTRAL_LINE {
-        @NotNull
+        @Nullable
         @Override
         public ParserState nextState(@NotNull final ParseWindow window, final boolean logToSout) {
             String line = window.getFocusLine();
@@ -246,7 +247,7 @@ enum ParserState {
      * Assumption: there is at most one delimiter line between diffs.
      */
     DELIMITER {
-        @NotNull
+        @Nullable
         @Override
         public ParserState nextState(@NotNull final ParseWindow window, final boolean logToSout) {
             String line = window.getFocusLine();
@@ -260,9 +261,9 @@ enum ParserState {
      * that is currently being parsed.
      *
      * @param window the window around the line currently being parsed.
-     * @return the next state of the state machine.
+     * @return the next valid state of the state machine; null if no valid state can be deduced.
      */
-    @NotNull
+    @Nullable
     public abstract ParserState nextState(@NotNull final ParseWindow window, final boolean logToSout);
 
     protected ParserState transition(final String currentLine, final ParserState toState, final boolean logToSout) {

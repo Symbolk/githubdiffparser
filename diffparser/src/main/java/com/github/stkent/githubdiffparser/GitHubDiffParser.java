@@ -71,6 +71,10 @@ public class GitHubDiffParser {
         while ((currentLine = window.slideForward()) != null) {
             targetState = state.nextState(window, logToSout);
             
+            if (targetState == null) {
+                throw new IllegalStateException("Parser reached illegal state!");
+            }
+            
             switch (targetState) {
                 case INITIAL:
                     // nothing to do
@@ -110,8 +114,6 @@ public class GitHubDiffParser {
                     parsedDiffs.add(currentDiff);
                     currentDiff = new Diff();
                     break;
-                default:
-                    throw new IllegalStateException(String.format("Illegal parser state '%s", targetState));
             }
             
             state = targetState;
