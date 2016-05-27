@@ -36,7 +36,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Represents a "hunk" of changes made to a file.
@@ -103,19 +102,31 @@ public class Hunk {
         return toFileRange.contains(toFileLineNumber);
     }
 
+    /**
+     * NOTE: result is based on the first line being labelled line number 1, not line number 0!
+     */
     @Nullable
     public Integer getHunkLineNumberForToFileLineNumber(final int toFileLineNumber) {
         if (!containsToFileLineNumber(toFileLineNumber)) {
             return null;
         }
         
-        final List<Line> toLines = lines.stream()
-                .filter(line -> line.getLineType() == Line.LineType.TO)
-                .collect(Collectors.toList());
-
-        final Line lineToLocate = toLines.get(toFileLineNumber - toFileRange.getLineStart()); // todo: refactor this, move into range
+        int currentLineNumber = 1;
+        int currentToLineNumber = toFileRange.getLineStart();
         
-        return lines.indexOf(lineToLocate);
+        while (currentLineNumber <= lines.size()) {
+            if (lines.get(currentLineNumber - 1).getLineType() == Line.LineType.TO) {
+                if (currentToLineNumber == toFileLineNumber) {
+                    return currentLineNumber;
+                }
+                
+                currentToLineNumber += 1;
+            }
+            
+            currentLineNumber++;
+        }
+
+        throw new IllegalStateException("This code path should never be exercised.");
     }
     
 }
