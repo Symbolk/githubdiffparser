@@ -49,21 +49,28 @@ public class Range {
     }
 
     /**
-     * The line number at which this range starts (inclusive).
-     *
-     * @return the line number at which this range starts.
+     * @return the line number at which this range starts (inclusive).
      */
     public int getLineStart() {
         return lineStart;
     }
 
     /**
-     * The count of lines in this range.
-     *
      * @return the count of lines in this range.
      */
     public int getLineCount() {
         return lineCount;
+    }
+    
+    public boolean contains(final int lineNumber) {
+        return lineStart <= lineNumber && lineNumber <= getLineEnd();
+    }
+
+    /**
+     * @return the line number at which this range ends (inclusive).
+     */
+    private int getLineEnd() {
+        return lineStart + lineCount - 1;
     }
 
 }
