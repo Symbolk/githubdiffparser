@@ -100,7 +100,7 @@ public class Hunk {
     }
     
     public boolean containsToFileLineNumber(final int toFileLineNumber) {
-        return getHunkLineNumberForToFileLineNumber(toFileLineNumber) != null;
+        return toFileRange.contains(toFileLineNumber);
     }
 
     @Nullable
@@ -113,7 +113,7 @@ public class Hunk {
                 .filter(line -> line.getLineType() == Line.LineType.TO)
                 .collect(Collectors.toList());
 
-        final Line lineToLocate = toLines.get(toFileLineNumber - toFileRange.getLineStart());
+        final Line lineToLocate = toLines.get(toFileLineNumber - toFileRange.getLineStart()); // todo: refactor this, move into range
         
         return lines.indexOf(lineToLocate);
     }
