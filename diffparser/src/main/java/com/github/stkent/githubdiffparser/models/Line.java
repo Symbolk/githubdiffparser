@@ -89,5 +89,25 @@ public class Line {
     public String getContent() {
         return content;
     }
+    
+    // Generated equals and hashCode
 
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        final Line line = (Line) o;
+
+        if (lineType != line.lineType) return false;
+        return content != null ? content.equals(line.content) : line.content == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = lineType != null ? lineType.hashCode() : 0;
+        result = 31 * result + (content != null ? content.hashCode() : 0);
+        return result;
+    }
 }
