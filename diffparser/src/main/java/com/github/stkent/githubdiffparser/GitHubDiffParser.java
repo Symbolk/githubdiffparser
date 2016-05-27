@@ -101,6 +101,8 @@ public class GitHubDiffParser {
             }
         }
 
+        parsedDiffs.add(currentDiff);
+
         return parsedDiffs;
     }
 
