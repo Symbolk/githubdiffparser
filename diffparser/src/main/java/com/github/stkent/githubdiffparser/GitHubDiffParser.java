@@ -111,7 +111,7 @@ public class GitHubDiffParser {
                     currentDiff = new Diff();
                     break;
                 default:
-                    throw new IllegalStateException(String.format("Illegal parser state '%s", state));
+                    throw new IllegalStateException(String.format("Illegal parser state '%s", targetState));
             }
             
             state = targetState;
