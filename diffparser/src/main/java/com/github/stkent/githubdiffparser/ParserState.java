@@ -166,8 +166,6 @@ enum ParserState {
                 return transition(line, NEUTRAL_LINE, logToSout);
             } else if (matchesHunkStartPattern(line)) {
                 return transition(line, HUNK_START, logToSout);
-            } else if (matchesDelimiterPattern(line)) {
-                return transition(line, DELIMITER, logToSout);
             } else {
                 if (matchesFromFilePattern(line)) {
                     return transition(line, FROM_FILE, logToSout);
@@ -200,8 +198,6 @@ enum ParserState {
                 return transition(line, NEUTRAL_LINE, logToSout);
             } else if (matchesHunkStartPattern(line)) {
                 return transition(line, HUNK_START, logToSout);
-            } else if (matchesDelimiterPattern(line)) {
-                return transition(line, DELIMITER, logToSout);
             } else {
                 if (matchesFromFilePattern(line)) {
                     return transition(line, FROM_FILE, logToSout);
@@ -230,8 +226,6 @@ enum ParserState {
                 return transition(line, NEUTRAL_LINE, logToSout);
             } else if (matchesHunkStartPattern(line)) {
                 return transition(line, HUNK_START, logToSout);
-            } else if (matchesDelimiterPattern(line)) {
-                return transition(line, DELIMITER, logToSout);
             } else {
                 if (matchesFromFilePattern(line)) {
                     return transition(line, FROM_FILE, logToSout);
@@ -239,20 +233,6 @@ enum ParserState {
                     return transition(line, HEADER, logToSout);
                 }
             }
-        }
-    },
-
-    /**
-     * The parser is in this state if it is currently parsing a line that is the delimiter between two Diffs.
-     * Assumption: there is at most one delimiter line between diffs.
-     */
-    DELIMITER {
-        @Nullable
-        @Override
-        public ParserState nextState(@NotNull final ParseWindow window, final boolean logToSout) {
-            String line = window.getFocusLine();
-            
-            return transition(line, INITIAL, logToSout);
         }
     };
 
@@ -292,10 +272,6 @@ enum ParserState {
     
     protected boolean matchesNeutralLinePattern(@NotNull final String line) {
         return line.startsWith(" ");
-    }
-    
-    protected boolean matchesDelimiterPattern(@NotNull final String line) {
-        return line.isEmpty();
     }
 
     protected boolean matchesNoNewlineAtEndOfFileLinePattern(@NotNull final String line) {

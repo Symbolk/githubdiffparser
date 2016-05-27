@@ -110,10 +110,6 @@ public class GitHubDiffParser {
                 case NEUTRAL_LINE:
                     parseNeutralLine(currentDiff, currentLine);
                     break;
-                case DELIMITER:
-                    parsedDiffs.add(currentDiff);
-                    currentDiff = new Diff();
-                    break;
             }
             
             state = targetState;
