@@ -83,6 +83,10 @@ public class Hunk {
         return lines;
     }
 
+    protected void setLines(final List<Line> lines) {
+        this.lines = lines;
+    }
+
     public void setFromFileRange(Range fromFileRange) {
         this.fromFileRange = fromFileRange;
     }
