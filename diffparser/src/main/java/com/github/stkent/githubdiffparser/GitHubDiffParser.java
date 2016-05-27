@@ -60,7 +60,7 @@ public class GitHubDiffParser {
     @NotNull
     public List<Diff> parse(InputStream in) {
         ResizingParseWindow window = new ResizingParseWindow(in);
-        ParserState state = ParserState.DIFF_START;
+        ParserState state = ParserState.INITIAL;
         List<Diff> parsedDiffs = new ArrayList<>();
         Diff currentDiff = new Diff();
         String currentLine;

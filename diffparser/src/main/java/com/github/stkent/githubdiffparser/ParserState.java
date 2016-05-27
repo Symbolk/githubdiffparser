@@ -46,6 +46,23 @@ import static com.github.stkent.githubdiffparser.Constants.HUNK_START_PATTERN;
 enum ParserState {
 
     /**
+     * The parser is in this state initially.
+     */
+    INITIAL {
+        @Nullable
+        @Override
+        public ParserState nextState(@NotNull final ParseWindow window, final boolean logToSout) {
+            String line = window.getFocusLine();
+
+            if (matchesDiffStartPattern(line)) {
+                return transition(line, DIFF_START, logToSout);
+            } else {
+                return null;
+            }
+        }
+    },
+
+    /**
      * The parser is in this state if it is currently parsing the first line of a new diff.
      */
     DIFF_START {
