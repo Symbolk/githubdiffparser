@@ -50,7 +50,7 @@ public class Diff {
     private List<String> headerLines = new ArrayList<>();
 
     private List<Hunk> hunks = new ArrayList<>();
-
+    
     /**
      * The header lines of the diff. These lines are purely informational and are not parsed.
      *
@@ -113,4 +113,9 @@ public class Diff {
     public Hunk getLatestHunk() {
         return hunks.get(hunks.size() - 1);
     }
+    
+    public boolean isNotEmpty() {
+        return !headerLines.isEmpty() || !hunks.isEmpty();
+    }
+    
 }

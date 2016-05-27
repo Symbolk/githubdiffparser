@@ -74,7 +74,10 @@ public class GitHubDiffParser {
             
             switch (state) {
                 case DIFF_START:
-                    parsedDiffs.add(currentDiff);
+                    if (currentDiff.isNotEmpty()) {
+                        parsedDiffs.add(currentDiff);
+                    }
+                    
                     currentDiff = new Diff();
                     break;
                 case HEADER:
@@ -101,8 +104,10 @@ public class GitHubDiffParser {
             }
         }
 
-        parsedDiffs.add(currentDiff);
-
+        if (currentDiff.isNotEmpty()) {
+            parsedDiffs.add(currentDiff);
+        }
+        
         return parsedDiffs;
     }
 
