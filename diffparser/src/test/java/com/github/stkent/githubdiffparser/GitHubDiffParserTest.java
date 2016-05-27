@@ -63,7 +63,7 @@ public class GitHubDiffParserTest {
         Assert.assertEquals(1, diff1.getHunks().size());
 
         List<String> headerLines = diff1.getHeaderLines();
-        Assert.assertEquals(2, headerLines.size());
+        Assert.assertEquals(1, headerLines.size());
 
         Hunk hunk1 = diff1.getHunks().get(0);
         Assert.assertEquals(4, hunk1.getFromFileRange().getLineStart());
@@ -83,6 +83,8 @@ public class GitHubDiffParserTest {
         // given
         GitHubDiffParser parser = new GitHubDiffParser();
         String in = ""
+                + "diff --git a/.file.txt b/.file.txt\n"
+                + "index 6f8e7fa..ab40505 100644\n"
                 + "--- from	2015-12-21 17:53:29.082877088 -0500\n"
                 + "+++ to	2015-12-21 08:41:52.663714666 -0500\n"
                 + "@@ -10 +10 @@\n"
@@ -110,6 +112,8 @@ public class GitHubDiffParserTest {
         // given
         GitHubDiffParser parser = new GitHubDiffParser();
         String in = ""
+                + "diff --git a/.file.txt b/.file.txt\n"
+                + "index 6f8e7fa..ab40505 100644\n"
                 + "--- from	2015-12-21 17:53:29.082877088 -0500\n"
                 + "+++ to	2015-12-21 08:41:52.663714666 -0500\n"
                 + "@@ -10,1 +10,1 @@\n"
