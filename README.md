@@ -1,6 +1,6 @@
 ### githubdiffparser
 
-Parse GitHub diffs with Java. Modified fork of [diffparser](https://github.com/thombergs/diffparser).
+Parse GitHub diffs with Java. Modified fork of [diffparser](https://github.com/thombergs/diffparser) v1.2. Version numbers are now maintained independently.
 
 ### Getting Started
 
@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.stkent:githubdiffparser:1.2'
+    compile 'com.github.stkent:githubdiffparser:1.0.0'
 }
 ```
 
