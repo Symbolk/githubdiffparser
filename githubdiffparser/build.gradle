@@ -32,7 +32,7 @@ ext {
     libraryArtifactId = 'githubdiffparser'
     libraryDescription = 'Diff parser that handles GitHub diff formatting.'
     libraryInceptionYear = '2016'
-    libraryGitHubRepoName = 'stkent/github-diff-parser'
+    libraryGitHubRepoName = 'stkent/githubdiffparser'
     libraryGitHubUrl = "https://github.com/${libraryGitHubRepoName}"
     libraryIssueTrackerUrl = "${libraryGitHubUrl}/issues"
     libraryWebsiteUrl = libraryGitHubUrl
