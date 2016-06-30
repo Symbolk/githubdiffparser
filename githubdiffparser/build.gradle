@@ -26,7 +26,7 @@ targetCompatibility = 1.8
 
 ext {
     // Library info:
-    libraryVersion = '1.0.0'
+    libraryVersion = '1.0.1'
     libraryName = 'githubdiffparser'
     libraryGroupId = 'com.github.stkent'
     libraryArtifactId = 'githubdiffparser'
