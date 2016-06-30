@@ -119,7 +119,11 @@ public class Hunk {
         int currentToLineNumber = toFileRange.getLineStart();
         
         while (currentLineNumber <= lines.size()) {
-            if (lines.get(currentLineNumber - 1).getLineType() == Line.LineType.TO) {
+            /*
+             * Lines of types "TO" and "NEUTRAL" are both present in the second file.
+             * Only lines of type "FROM" are not present in the second file.
+             */
+            if (lines.get(currentLineNumber - 1).getLineType() != Line.LineType.FROM) {
                 if (currentToLineNumber == toFileLineNumber) {
                     return currentLineNumber;
                 }
