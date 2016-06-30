@@ -45,7 +45,7 @@ import java.util.List;
 public class GitHubDiffParserTest {
 
     @Test
-    public void testParsingActualDiff1() throws Exception {
+    public void testParsingActualDiff() throws Exception {
         // given
         GitHubDiffParser parser = new GitHubDiffParser();
         InputStream in = getClass().getResourceAsStream("github.diff");
@@ -76,40 +76,6 @@ public class GitHubDiffParserTest {
         Assert.assertEquals(Line.LineType.TO, lines.get(3).getLineType());
         Assert.assertEquals(Line.LineType.NEUTRAL, lines.get(7).getLineType());
         Assert.assertEquals(Line.LineType.NEUTRAL, lines.get(8).getLineType());
-    }
-
-    @Test
-    public void testParsingActualDiff2() throws Exception {
-        // given
-        GitHubDiffParser parser = new GitHubDiffParser();
-        InputStream in = getClass().getResourceAsStream("github2.diff");
-
-        // when
-        List<Diff> diffs = parser.parse(in);
-
-        // then
-        Assert.assertNotNull(diffs);
-        Assert.assertEquals(5, diffs.size());
-
-        Diff diff1 = diffs.get(0);
-        Assert.assertEquals("/dev/null", diff1.getFromFileName());
-        Assert.assertEquals("app/src/main/res/drawable/bg_btn_primary.xml", diff1.getToFileName());
-        Assert.assertEquals(1, diff1.getHunks().size());
-
-        List<String> headerLines = diff1.getHeaderLines();
-        Assert.assertEquals(2, headerLines.size());
-
-        Hunk hunk1 = diff1.getHunks().get(0);
-        Assert.assertEquals(0, hunk1.getFromFileRange().getLineStart());
-        Assert.assertEquals(0, hunk1.getFromFileRange().getLineCount());
-        Assert.assertEquals(1, hunk1.getToFileRange().getLineStart());
-        Assert.assertEquals(28, hunk1.getToFileRange().getLineCount());
-
-        List<Line> lines = hunk1.getLines();
-        Assert.assertEquals(28, lines.size());
-        Assert.assertEquals(Line.LineType.TO, lines.get(3).getLineType());
-        Assert.assertEquals(Line.LineType.TO, lines.get(7).getLineType());
-        Assert.assertEquals(Line.LineType.TO, lines.get(18).getLineType());
     }
     
     @Test
