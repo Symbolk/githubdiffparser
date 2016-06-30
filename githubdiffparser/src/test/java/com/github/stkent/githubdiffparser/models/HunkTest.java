@@ -27,65 +27,35 @@ public class HunkTest {
 
         assertFalse(hunk.containsToFileLineNumber(toFileRangeStart + toFileRangeCount));
     }
-    
-    @Test
-    public void testGetCorrectHunkLineNumberCase1() {
-        final int toFileRangeStart = 3;
-        final int toFileRangeCount = 5;
-
-        final Hunk hunk = new Hunk();
-        hunk.setToFileRange(new Range(toFileRangeStart, toFileRangeCount));
-        hunk.setLines(new ArrayList<Line>() {{
-            add(new Line(TO, "line3"));
-            add(new Line(TO, "line4"));
-            add(new Line(TO, "line5"));
-            add(new Line(TO, "line6"));
-            add(new Line(TO, "line7"));
-        }});
-
-        assert hunk.getLines().size() == hunk.getToFileRange().getLineCount();
-        
-        final int targetToFileLineNumber = 6;
-
-        //noinspection ConstantConditions
-        assert toFileRangeStart <= targetToFileLineNumber;
-
-        //noinspection ConstantConditions
-        assert targetToFileLineNumber < toFileRangeStart + toFileRangeCount;
-
-        final int expectedHunkLineNumber = 4;
-        final int actualHunkLineNumber = hunk.getHunkLineNumberForToFileLineNumber(targetToFileLineNumber);
-        assertEquals(expectedHunkLineNumber, actualHunkLineNumber);
-    }
 
     @Test
     public void testGetCorrectHunkLineNumberCase2() {
-        final int toFileRangeStart = 3;
-        final int toFileRangeCount = 5;
+        final int toFileRangeStart = 27;
+        final int toFileRangeCount = 8;
 
         final Hunk hunk = new Hunk();
         hunk.setToFileRange(new Range(toFileRangeStart, toFileRangeCount));
         hunk.setLines(new ArrayList<Line>() {{
-            add(new Line(FROM, "fromline1"));
-            add(new Line(TO, "toline3"));
-            add(new Line(TO, "toline4"));
-            add(new Line(NEUTRAL, "neutralline9"));
-            add(new Line(NEUTRAL, "neutralline10"));
-            add(new Line(TO, "toline5"));
-            add(new Line(FROM, "fromline2"));
-            add(new Line(TO, "toline6"));
-            add(new Line(NEUTRAL, "neutralline11"));
-            add(new Line(TO, "toline7"));
-            add(new Line(NEUTRAL, "neutralline12"));
+            add(new Line(TO,       "1"));
+            add(new Line(NEUTRAL,  "2"));
+            add(new Line(FROM,     "3"));
+            add(new Line(FROM,     "4"));
+            add(new Line(NEUTRAL,  "5"));
+            add(new Line(NEUTRAL,  "6"));
+            add(new Line(FROM,     "7"));
+            add(new Line(TO,       "8"));
+            add(new Line(NEUTRAL,  "9"));
+            add(new Line(NEUTRAL, "10"));
+            add(new Line(NEUTRAL, "11"));
         }});
 
         assert hunk.getLines()
                 .stream()
-                .filter(line -> line.getLineType() == TO)
+                .filter(line -> line.getLineType() != FROM)
                 .count()
                         == toFileRangeCount;
 
-        final int targetToFileLineNumber = 6;
+        final int targetToFileLineNumber = 32;
 
         //noinspection ConstantConditions
         assert toFileRangeStart <= targetToFileLineNumber;
@@ -93,7 +63,7 @@ public class HunkTest {
         //noinspection ConstantConditions
         assert targetToFileLineNumber < toFileRangeStart + toFileRangeCount;
 
-        final int expectedHunkLineNumber = 8;
+        final int expectedHunkLineNumber = 9;
         final int actualHunkLineNumber = hunk.getHunkLineNumberForToFileLineNumber(targetToFileLineNumber);
         assertEquals(expectedHunkLineNumber, actualHunkLineNumber);
     }
