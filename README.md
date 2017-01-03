@@ -4,29 +4,25 @@ Parse GitHub diffs with Java. Modified fork of [diffparser](https://github.com/t
 
 ### Getting Started
 
-<ol>
-  <li>Specify githubdiffparser as a dependency in your build.gradle file:</li>
-</ol>
+1. Specify githubdiffparser as a dependency in your build.gradle file:
 
-```groovy
-repositories {
-    jcenter()
-}
+    ```groovy
+    repositories {
+        jcenter()
+    }
 
-dependencies {
-    compile 'com.github.stkent:githubdiffparser:1.0.1'
-}
-```
+    dependencies {
+        compile 'com.github.stkent:githubdiffparser:1.0.1'
+    }
+    ```
 
-<ol start="2">
-  <li>Parse GitHub diffs!</li>
-</ol>
+2. Parse GitHub diffs!
 
-```
-GitHubDiffParser parser = new GitHubDiffParser();
-InputStream in = new FileInputStream("/path/to/file.diff");
-List<Diff> diff = parser.parse(in);
-```
+    ```
+    GitHubDiffParser parser = new GitHubDiffParser();
+    InputStream in = new FileInputStream("/path/to/file.diff");
+    List<Diff> diff = parser.parse(in);
+    ```
 
 ### GitHub diff format
 
