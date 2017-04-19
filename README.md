@@ -1,5 +1,7 @@
 ### githubdiffparser
 
+[ ![Download](https://api.bintray.com/packages/stkent/java-libraries/githubdiffparser/images/download.svg) ](https://bintray.com/stkent/java-libraries/githubdiffparser/_latestVersion)
+
 Parse GitHub diffs with Java. Modified fork of [diffparser](https://github.com/thombergs/diffparser) v1.2. Version numbers are now maintained independently.
 
 ### Getting Started
